@@ -280,7 +280,7 @@ model5 =
         tau <- 1
         rate[1] <- beta * S * I/N
         change[1, ] <- c(-1, 1, 0)
-        rate[2] <- gamma * I
+        rate[2] <- rho * gamma * I
         change[2, ] <- c(0, -1, 0)
         rate[3] <- mu * N
         change[3, ] <- c(1, 0, 0)
@@ -295,7 +295,7 @@ model5 =
         rate[8] <- delta 
         change[8, ] <- c(0, +1, 0)
         rate[9] <- (1-rho) * gamma * I
-        change[9, ] <- c(0, 0, 1)
+        change[9, ] <- c(0, -1, 1)
         init <- c(S = S, I = I, R = R)
         for (i in 1:9) {
           num <- rpois(1, rate[i] * tau)
@@ -335,21 +335,21 @@ model6=
     init2 <- init
     Equations <- function(pars, init, end.time) {
       with(as.list(c(pars, init)), {
-        rate <- rep(0, 26)
-        change <- matrix(0, nrow = 26, ncol = 6)
+        rate <- rep(0, 28)
+        change <- matrix(0, nrow = 28, ncol = 6)
         N <- S + I + R
         Na <- Sa + Ia + Ra
         tau <- 1
         rate[1] <- beta * S * I/N
         change[1, ] <- c(-1, 1, 0, 0, 0, 0)
-        rate[2] <- (gamma+mu)/(1-rho) * I
+        rate[2] <- (mu)* I
         change[2, ] <- c(0, -1, 0, 0, 0, 0)
         rate[3] <- mu * N
         change[3, ] <- c(1, 0, 0, 0, 0, 0)
         rate[4] <- mu * S
         change[4, ] <- c(-1, 0, 0, 0, 0, 0)
-        rate[5] <- gamma * I
-        change[5, ] <- c(0, 0, 1, 0, 0, 0)
+        rate[5] <- rho * gamma * I
+        change[5, ] <- c(0, -1, 0, 0, 0)
         rate[6] <- mu * R
         change[6, ] <- c(0, 0, -1, 0, 0, 0)
         rate[7] <- epsilon * S
@@ -369,14 +369,14 @@ model6=
         
         rate[14] <- beta * Sa * Ia/Na
         change[14, ] <- c(0, 0, 0, -1, 1, 0)
-        rate[15] <- (gamma+mu)/(1-rho) * Ia
+        rate[15] <- (mu)* Ia
         change[15, ] <- c(0, 0, 0, 0, -1, 0)
         rate[16] <- mu * Na
         change[16, ] <- c(0, 0, 0, 1, 0, 0)
         rate[17] <- mu * Sa
         change[17, ] <- c(0, 0, 0, -1, 0, 0)
-        rate[18] <- gamma * Ia
-        change[18, ] <- c(0, 0, 0, 0, 0, 1)
+        rate[18] <- rho * gamma * Ia
+        change[18, ] <- c(0, 0, 0, 0, -1, 0)
         rate[19] <- mu * Ra
         change[19, ] <- c(0, 0, 0, 0, 0, -1)
         rate[20] <- epsilon * Sa
@@ -393,9 +393,16 @@ model6=
         change[25, ] <- c(0, 0, 0, 0, +1, 0)
         rate[26] <- delta * R
         change[26, ] <- c(0, 0, 0, 0, 0, +1)
+
+
+	rate[27] <- (1-rho) * gamma * I
+        change[27, ] <- c(0, -1, 1, 0, 0, 0)
+	rate[28] <- (1-rho) * gamma * I
+        change[28, ] <- c(0, 0, 0, 0, -1, 1)
+
         
         init <- c(S = S, I = I, R = R, Sa = Sa, Ia = Ia, Ra = Ra)
-        for (i in 1:26) {
+        for (i in 1:28) {
           num <- rpois(1, rate[i] * tau)
           num.min <- min(num, init[which(change[i, ] < 
                                            0)])
@@ -439,8 +446,8 @@ model7 =
     init2 <- init
     Equations <- function(pars, init, end.time) {
       with(as.list(c(pars, init)), {
-        rate <- rep(0, 8)
-        change <- matrix(0, nrow = 8, ncol = 4)
+        rate <- rep(0, 9)
+        change <- matrix(0, nrow = 9, ncol = 4)
         N <- S + E + I + R
         tau <- 1
         rate[1] <- beta * S * I/N
@@ -449,18 +456,20 @@ model7 =
         change[2, ] <- c(0, -1, 1, 0)
         rate[3] <- mu * N
         change[3, ] <- c(1, 0, 0, 0)
-        rate[4] <- (gamma+mu)/(1-rho) * I
+        rate[4] <- mu * I
         change[4, ] <- c(0, 0, -1, 0)
-        rate[5] <- gamma * I
-        change[5, ] <- c(0, 0, 0, 1)
+        rate[5] <- (1-rho) * gamma * I
+        change[5, ] <- c(0, 0, -1, 1)
         rate[6] <- mu * S
         change[6, ] <- c(-1, 0, 0, 0)
         rate[7] <- mu * E
         change[7, ] <- c(0, -1, 0, 0)
         rate[8] <- mu * R
         change[8, ] <- c(0, 0, 0, -1)
+	rate[9] <- rho * gamma * I
+        change[9, ] <- c(0, 0, -1, 0)
         init <- c(S = S, E = E, I = I, R = R)
-        for (i in 1:8) {
+        for (i in 1:9) {
           num <- rpois(1, rate[i] * tau)
           num.min <- min(num, init[which(change[i, ] < 
                                            0)])
